@@ -13,23 +13,28 @@ class LEAFLY:
     def agebypass(self):
         try:
             yes_button = self.driver.find_element(By.XPATH, '//button[text()="yes"]')
-            # String typeOfElement = someElement.getAttribute("type"); 
             yes_button.click()
             return 1
-        
         except:
-            print("disabled button")
+            print("agebypass button not found")
             time.sleep(2)
             return 0
     
     def nextPage(self):
         try:
-            next_button = self.driver.find_element(By.XPATH, '//a[text()="Next"]')
-            # String typeOfElement = someElement.getAttribute("type"); 
+            next_button = self.driver.find_element(By.XPATH, '//a[text()="Next"]') 
             next_button.click()
             return 1
-        
         except:
-            print("disabled button")
+            print("nextPage button not found")
             time.sleep(2)
             return 0
+
+    def getAllCards(self):
+        cards = None
+        try:
+            cards = self.driver.find_elements_by_class_name('carousel-card--quadruplet')
+            print("cards: ", len(cards))
+        except:
+            print("cards not found")
+        return cards

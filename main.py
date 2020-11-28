@@ -17,6 +17,14 @@ leafly.agebypass()
 time.sleep(2)
 leafly.nextPage()
 time.sleep(2)
+cards = leafly.getAllCards()
+
+for card in cards:
+    try:
+        href = card.find_element_by_class_name('relative').get_attribute("href")
+        print("href: ", href)
+    except:
+        print("couldn't locate href in a element")
 
 #create function that gathers all links on strains site(potentially grab strain info that's 
 #displayed on front page)
