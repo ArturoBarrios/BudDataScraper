@@ -9,6 +9,22 @@ import time
 class LEAFLY:
     def __init__(self,driver):
         self.driver = driver
+    
+    def get_feelings(self,contains_text, effect_section):
+        feelings = effect_section.find_elements_by_xpath("//span[contains(text(),'"+contains_text+"')]")
+        i = 0
+        #positive and negative feelings
+        for feeling in feelings:
+            feelingx_text = feelings[i].text
+            feelingx_text = feelingx_text.replace("%", "")
+            print("feeling text: ", feelingx_text)
+            #percentage
+            feelingx_val = [int(s) for s in feelingx_text.split() if s.isdigit()][0]
+            print("feeling 1: ", feelingx_val)
+            parsed_feelingx_text = feelingx_text.split()
+            feelingx = parsed_feelingx_text[-1]
+            print("feelingx: ", feelingx)
+            i+=1
 
     def extractBudData(self):
         # data_element = self.driver.find_element_by_id('strain-card-data')
@@ -36,11 +52,17 @@ class LEAFLY:
         #percentage
         calm_enrgy = calm_enrgy[11:len(calm_enrgy)-2]
         print("cccc: ", calm_enrgy)
-
+        #description
+        description = content.find_element_by_class_name('strain__description').find_element_by_tag_name('p').text
+        print("description: ", description)
+        #effect section################
+        effect_section = self.driver.find_element_by_id('strain-effects-section')
+        print("effect section: ", effect_section)
+        reported_effects = effect_section.find_elements_by_tag_name('div')
+        print("reported effects: ", reported_effects[2].text)
+        self.get_feelings('of people report feeling',effect_section)
+        self.get_feelings('people say it helps with', effect_section)
         
-        
-        
-
 
     def agebypass(self):
         try:
