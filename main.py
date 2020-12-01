@@ -6,7 +6,6 @@ from LEAFLY_SCRAPE import LEAFLY
 
 import time
 driver = webdriver.Chrome('/Users/arturobarrios/Documents/BudRecommender/chromedriver')
-# driver = webdriver.Chrome()
 driver.get("https://www.leafly.com/strains")
 
 delay = 3 # seconds
@@ -15,24 +14,19 @@ delay = 3 # seconds
 leafly = LEAFLY(driver)
 leafly.agebypass()
 time.sleep(2)
-leafly.nextPage()
-time.sleep(2)
-cards = leafly.getAllCards()
+# leafly.nextPage()
+# time.sleep(2)
+hyperlinks = leafly.getAllHyperlinks()
 
-for card in cards:
-    try:
-        href = card.find_element_by_class_name('relative').get_attribute("href")
-        print("href: ", href)
-    except:
-        print("couldn't locate href in a element")
+i = 0
+for hyperlink in hyperlinks:
+    if(i==0):
+        leafly.open_new_leafly_tab(hyperlink)
+        leafly.extractBudData()
+        # leafly.close_tab(-1)
+    i+=1
 
-#create function that gathers all links on strains site(potentially grab strain info that's 
-#displayed on front page)
-#iterate through each hyperlink
 
-#create function that gathers information for each
-
-#click next page and do these steps over
 
 
 
