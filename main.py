@@ -14,17 +14,21 @@ delay = 3 # seconds
 leafly = LEAFLY(driver)
 leafly.agebypass()
 time.sleep(2)
-# leafly.nextPage()
-# time.sleep(2)
-hyperlinks = leafly.getAllHyperlinks()
-
-i = 0
-for hyperlink in hyperlinks:
-    if(i==0):
+bud_data = []
+get_next_page = 1
+while(get_next_page):
+    hyperlinks = leafly.getAllHyperlinks()
+    i = 0
+    for hyperlink in hyperlinks:
+        # if(i<2):
         leafly.open_new_leafly_tab(hyperlink)
-        leafly.extractBudData()
-        # leafly.close_tab(-1)
-    i+=1
+        data = leafly.extractBudData()
+        bud_data.append(data)
+        leafly.close_tab(-1)
+        i+=1
+    get_next_page = leafly.get_next_page()
+
+print("bud data: ",bud_data)
 
 
 
