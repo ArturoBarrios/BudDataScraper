@@ -49,9 +49,11 @@ class LEAFLY:
         description = ""
         people_reporting_effects = ""
         num_of_effect_reports = ""
+        stars = ""
         feelings_dict = {}
+        review_data = {}
 
-        bud_data = {"name": "", "secondary_name":"","strain_type":"","potency":"","calm_enrgy":"","stars":"","reviews_count":"","description":"","people_reporting_effects": "", "reported_effects_count": "","effects": {}}
+        bud_data = {"name": "", "secondary_name":"","strain_type":"","potency":"","calm_enrgy":"","stars":"","reviews_count":"","description":"","people_reporting_effects": "", "reported_effects_count": "","effects": {},"review_data":{}}
         # data_element = self.driver.find_element_by_id('strain-card-data')
         content = None
         try:
@@ -115,13 +117,45 @@ class LEAFLY:
                 feelings_dict = {**pos_neg_feelings_dict, **helps_with_dict}
             except:
                 print("coudln't get reported effects")
-            ###todo!
-            # try:
-            #     read_all_reviews_element_href = self.driver.find_element(By.XPATH, '//a[text()="Read all reviews"]').get_attribute("href")
-            #     self.driver.get(read_all_reviews_element_href)
+            #Review content
+            try:
+                get_next_review_page = 1
+                while(get_next_review_page):
+                    read_all_reviews_element_href = None
+                    try:
+                        read_all_reviews_element_href = self.driver.find_element(By.XPATH, '//a[text()="Read all reviews"]').get_attribute("href")
+                        self.driver.get(read_all_reviews_element_href)
+                        time.sleep(3)
+                    except:
+                        print("reviews don't exist for this strain: ", strain_name)
+                    try:
+                        review_contents = self.driver.find_elements_by_css_selector("article.review-card")
+                        print("reviews content: ", review_contents)
+                        for review_content in review_contents:
+                            stars_content = review_content.find_element_by_css_selector("span.star-rating").get_attribute("style")
+                            stars = re.findall('\d*%', stars_content)[0]
+                            stars = stars[0:len(stars)-1]
 
-            # except:
-            #     print("couldn't get reviews")
+                            header_content = review_content.find_element_by_css_selector("header.border-b")
+                            date = header_content.find_element_by_css_selector("div.text-default").text
+
+                            feelings_content = review_content.find_elements_by_css_selector("div.jsx-1641593479")
+                            feelings = []
+                            for feeling_content in feelings_content:
+                                if(feeling_content.text):
+                                    feelings.append(feeling_content.text)
+
+                            review_body = review_content.find_element_by_xpath("//div[@itemprop='reviewBody']")
+                    
+                    except:
+                        print("couldn't find review_contents")
+
+                    get_next_review_page = self.driver.find_element(By.XPATH, '//a[text()="Next"]').get_attribute("href")
+                    if(get_next_review_page):
+                        self.driver.get(get_next_review_page)
+                        time.sleep(3)
+            except:
+                print("couldn't get reviews")
 
         bud_data["name"] = strain_name
         bud_data["secondary_name"] = strain_secondary_name
