@@ -16,19 +16,21 @@ leafly.agebypass()
 time.sleep(2)
 bud_data = []
 get_next_page = 1
-# while(get_next_page):
-hyperlinks = leafly.getAllHyperlinks()
-i = 0
-for hyperlink in hyperlinks:
-    if(i<1):
+while(get_next_page):
+    hyperlinks = leafly.getAllHyperlinks()
+    i = 0
+    for hyperlink in hyperlinks:
+        # if(i<8):
         leafly.open_new_leafly_tab(hyperlink)
         data = leafly.extractBudData()
         bud_data.append(data)
-        # leafly.close_tab(-1)
+        leafly.close_tab(-1)
         i+=1
-        # get_next_page = leafly.get_next_page()
+        get_next_page = leafly.get_next_page()
+        # else:
+        #     get_next_page = 0
 
-# print("bud data: ",bud_data)
+print("bud data: ",bud_data)
 
 
 
