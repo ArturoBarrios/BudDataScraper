@@ -141,7 +141,7 @@ class LEAFLY:
                     print("reviews don't exist for this strain: ", strain_name)
                 get_next_review_page = 1
                 test = 0
-                while(get_next_review_page):
+                while(get_next_review_page and test < 1):
                     read_all_reviews_element_href = None
                     try:
                         review_contents = self.driver.find_elements_by_css_selector("article.review-card")
@@ -188,7 +188,7 @@ class LEAFLY:
                         test += 1
                         get_next_review_page = self.driver.find_element(By.XPATH, '//a[text()="Next"]').get_attribute("href")
                         self.driver.get(get_next_review_page)
-                        time.sleep(3)
+                        time.sleep(2)
                     except:
                         get_next_review_page = 0
                         print("no next review page for strain: ", strain_name)

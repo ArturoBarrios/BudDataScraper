@@ -26,9 +26,12 @@ while(get_next_page):
         bud_data.append(data)
         leafly.close_tab(-1)
         i+=1
+    get_next_page+=1
+    try:
         get_next_page = leafly.get_next_page()
-        # else:
-        #     get_next_page = 0
+    except:
+        print("failed to get next page: ", )
+        
 
 print("bud data: ",bud_data)
 
