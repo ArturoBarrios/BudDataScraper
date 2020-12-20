@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from LEAFLY_SCRAPE import LEAFLY
 
 import time
-driver = webdriver.Chrome('/Users/arturobarrios/Documents/BudDataScraper/chromedriver')
+driver = webdriver.Chrome('/Users/miniarti/Documents/BudDataScraper/chromedriver')
 driver.get("https://www.leafly.com/strains")
 
 delay = 3 # seconds
@@ -15,18 +15,20 @@ leafly = LEAFLY(driver)
 leafly.agebypass()
 time.sleep(2)
 bud_data = []
+page_count = 0
 get_next_page = 1
-while(get_next_page):
+while(get_next_page and page_count<3):
     hyperlinks = leafly.getAllHyperlinks()
     i = 0
     for hyperlink in hyperlinks:
-        # if(i<8):
+        # if(i<2):
         leafly.open_new_leafly_tab(hyperlink)
         data = leafly.extractBudData()
         bud_data.append(data)
         leafly.close_tab(-1)
-        i+=1
+        # i+=1
     get_next_page+=1
+    page_count+=1
     try:
         get_next_page = leafly.get_next_page()
     except:
