@@ -231,24 +231,22 @@ class LEAFLY:
         except:
             print("nextPage button not found")
             return 0
+    def waitForPageLoad(self):
+        try:
+            myElem = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, '__next')))
+            print ("Page is ready!")
+        except TimeoutException:
+            print ("Loading took too much time!")
 
     def getAllHyperlinks(self):
         hyperlinks = []
         #seems to error out when no element is found
         try:
-            # //*[@id="__next"]/div[2]/ul/li[1]/div/a
-            
-            try:
-                myElem = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, '__next')))
-                print ("Page is ready!")
-            except TimeoutException:
-                print ("Loading took too much time!")
-            
+            self.waitForPageLoad()
             cards = self.driver.find_elements(By.XPATH, '//a[contains(@href,"/strains/")]')
-            print("cards: ", cards)
-            # for card in cards: 
-            #     href = card.find_element_by_class_name('relative').get_attribute("href")
-            #     hyperlinks.append(href)
+            for card in cards: 
+                href = card.get_attribute("href")
+                hyperlinks.append(href)
         except:
             print("cards not found")
         return hyperlinks
