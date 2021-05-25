@@ -60,6 +60,7 @@ class LEAFLY:
         content = None
         try:
             content = self.driver.find_element_by_css_selector("div#strain-card-data")
+            console.log("content: ", content)
 
         except:
             print("couldnt get content", strain_name)
@@ -233,11 +234,21 @@ class LEAFLY:
 
     def getAllHyperlinks(self):
         hyperlinks = []
+        #seems to error out when no element is found
         try:
-            cards = self.driver.find_elements_by_class_name('carousel-card--quadruplet')
-            for card in cards: 
-                href = card.find_element_by_class_name('relative').get_attribute("href")
-                hyperlinks.append(href)
+            # //*[@id="__next"]/div[2]/ul/li[1]/div/a
+            
+            try:
+                myElem = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, '__next')))
+                print ("Page is ready!")
+            except TimeoutException:
+                print ("Loading took too much time!")
+            
+            cards = self.driver.find_elements(By.XPATH, '//a[contains(@href,"/strains/")]')
+            print("cards: ", cards)
+            # for card in cards: 
+            #     href = card.find_element_by_class_name('relative').get_attribute("href")
+            #     hyperlinks.append(href)
         except:
             print("cards not found")
         return hyperlinks
